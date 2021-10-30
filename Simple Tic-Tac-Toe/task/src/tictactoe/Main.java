@@ -4,16 +4,29 @@ import java.util.Scanner;
 
 public class Main {
 
-    static char[][] field = new char[3][3];
+    static char[][] field = new char[][]{
+            {' ', ' ', ' '},
+            {' ', ' ', ' '},
+            {' ', ' ', ' '}
+    };
     private static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-        System.out.print("Enter cells: ");
-        String s = scanner.nextLine();
-        fillField(s);
         printField();
-        enterXY();
-        printField();
+        while (true) {
+            enterXY();
+            printField();
+            if (isDraw()) {
+                System.out.println("Draw");
+                break;
+            } else if (isWin('X')) {
+                System.out.println("X wins");
+                break;
+            } else if (isWin('O')) {
+                System.out.println("O wins");
+                break;
+            }
+        }
     }
 
     private static void printField() {
@@ -46,7 +59,7 @@ public class Main {
                         System.out.println("This cell is occupied! Choose another one!");
                         continue;
                 }
-                field[x][y] = 'X';
+                field[x][y] = count('X') <= count('O') ? 'X' : 'O';
                 invalidCoordinates = false;
             } catch (ArrayIndexOutOfBoundsException e) {
                 System.out.println("Coordinates should be from 1 to 3!");
@@ -54,43 +67,11 @@ public class Main {
         }
     }
 
-    private static void fillField(String s) {
-        int length = 3;
-        char[] chars = s.toCharArray();
-        int index = 0;
-        for (int i = 0; i < length; i++) {
-            for (int j = 0; j < length; j++) {
-                field[i][j] = chars[index++];
-            }
-        }
-    }
-
-/*
-    private static void printState() {
-        System.out.println(isImpossible() ? "Impossible" :
-                isDraw() ? "Draw" :
-                        isWin('X') ? "X wins" :
-                                isWin('O') ? "O wins" :
-                                        "Game not finished");
-    }
 
     private static boolean isDraw() {
-        return count('_') == 0 &&
+        return count(' ') == 0 &&
                 !isWin('X') &&
                 !isWin('O');
-    }
-
-    private static boolean isImpossible() {
-        int x = count('X');
-        int o = count('O');
-
-        if (isWin('X') && isWin('O')) {
-            return true;
-        } else {
-            return x >= o ?
-                    x - o > 1 :
-                    o - x > 1;
-        }
     }
 
     private static boolean isWin(char c) {
@@ -116,5 +97,4 @@ public class Main {
         return counter;
     }
 
-*/
 }
